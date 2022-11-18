@@ -1,5 +1,5 @@
 import React from 'react'
-import argentBankLogo from '../assets/argentBankLogo.png'
+import argentBankLogo from '../../assets/argentBankLogo.png'
 import { Link } from 'react-router-dom'
 
 function Headers() {
@@ -14,8 +14,8 @@ function Headers() {
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
       <div>
-        <Link className="main-nav-item" to="/sign-in.html">
-          <i className="fa fa-user-circle"></i>
+        <Link className="main-nav-item" to="/sign-in">
+          <i className="fa fa-user-circle space"></i>
           Sign In
         </Link>
       </div>
