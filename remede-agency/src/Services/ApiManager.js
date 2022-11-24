@@ -8,8 +8,8 @@ export async function userLogin(email, password) {
     },
     body: JSON.stringify({ email: email, password: password }),
   }).then((results) => results)
-  if (result.statusText === 'OK') {
-    return result
+  if (result.ok === true) {
+    return result.json().then((data) => data)
   } else {
     return null
   }
