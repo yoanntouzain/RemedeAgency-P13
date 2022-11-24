@@ -34,3 +34,12 @@ node_modules
 config/runtime.yaml
 
 .DS_Store
+
+designs
+server
+CONTRIBUTING.md
+package-lock.json
+package.json
+README.md
+swagger.yaml
+.env
