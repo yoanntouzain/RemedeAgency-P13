@@ -18,17 +18,17 @@ import './index.css'
  */
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  // <Provider store={store}>
-  <React.StrictMode>
-    <BrowserRouter>
-      <Headers />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<SignIn />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
-  </React.StrictMode>
-  // </Provider>
+  <Provider store={store}>
+    <React.StrictMode>
+      <BrowserRouter>
+        <Headers />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </React.StrictMode>
+  </Provider>
 )

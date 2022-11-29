@@ -1,6 +1,8 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import { userLogin } from '../../Services/ApiManager'
+import { useState, useEffect } from 'react'
+import { userLogin, userProfile } from '../../Services/ApiManager'
+import { useDispatch } from 'react-redux'
+import { signUpUser, resultToken, addToken } from '../../features/users'
 
 //CSS
 import './signIn.css'
@@ -11,16 +13,38 @@ function SignIn() {
   const [msgError, setMsgError] = useState(false)
   const navigate = useNavigate()
 
+  // async function checkForm(e) {
+  //   e.preventDefault()
+  //   let response = await userLogin(email, password)
+  //   if (response != null) {
+  //     setMsgError(false)
+  //     let data = await userProfile(response)
+  //     // console.log(data)
+  //     navigate('/profile')
+  //   } else {
+  //     setMsgError(true)
+  //   }
+  // }
+
+  const dispatch = useDispatch()
+
   async function checkForm(e) {
     e.preventDefault()
-    let response = await userLogin(email, password)
-    // console.log(response.body.token)
-    if (response != null) {
-      setMsgError(false)
-      navigate('/profile')
-    } else {
-      setMsgError(true)
-    }
+    dispatch(signUpUser({ email, password }))
+    // dispatch(resultToken())
+    setTimeout(() => {
+      dispatch(resultToken())
+    }, 1000)
+
+    // if (localStorage.getItem('token') != null) {
+    //   dispatch(resultToken())
+    //   setMsgError(false)
+    // } else {
+    //   setMsgError(true)
+    // }
+    setTimeout(() => {
+      console.log(JSON.parse(localStorage.user))
+    }, 2000)
   }
 
   return (
