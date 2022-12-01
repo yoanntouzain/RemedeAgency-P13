@@ -22,7 +22,6 @@ export async function userProfile(response) {
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + response,
     },
-    // body: JSON.stringify({}),
   }).then((results) => results.json().then((data) => data))
   return result
 }
