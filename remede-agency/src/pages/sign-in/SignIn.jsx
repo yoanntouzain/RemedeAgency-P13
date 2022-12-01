@@ -1,20 +1,31 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { userLogin } from '../../Services/ApiManager'
+import { useDispatch } from 'react-redux'
+import { addDataStorage, login } from '../../features/login'
+
+//CSS
+import './signIn.css'
 
 function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [msgError, setMsgError] = useState(false)
   const navigate = useNavigate()
 
-  async function connection(e) {
+  const dispatch = useDispatch()
+
+  async function checkForm(e) {
     e.preventDefault()
-    let response = await userLogin(email, password)
-    console.log(response)
+    console.log(email, password)
+    const response = await login(email, password)
     if (response != null) {
+      console.log('le user est co')
+      dispatch(addDataStorage(response))
+      setMsgError(false)
       navigate('/profile')
     } else {
-      alert("L'identifiant ou le mot de passe sont incorrect")
+      console.log("le user n'existe pas")
+      setMsgError(true)
     }
   }
 
@@ -23,8 +34,11 @@ function SignIn() {
       <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
+        <p className={`errorUser ${msgError ? 'active' : ''} `}>
+          L'email ou(et) le mot de passe est incorrect
+        </p>
         {/* Form */}
-        <form onSubmit={connection}>
+        <form onSubmit={checkForm}>
           <div className="input-wrapper">
             <label htmlFor="username">Username</label>
             <input
@@ -36,7 +50,6 @@ function SignIn() {
                 setEmail(e.target.value)
               }}
             />
-            <p className="errorMail">L'email est incorrect</p>
           </div>
           <div className="input-wrapper">
             <label htmlFor="password">Password</label>

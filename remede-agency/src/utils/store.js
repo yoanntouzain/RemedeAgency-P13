@@ -1,11 +1,8 @@
-// import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit'
+import { loginValue } from '../features/login'
 
-// const initialState = {
-//   email: '',
-//   password: '',
-// }
-
-// configureStore({
-//   reducer: {
-//   },
-// })
+export default configureStore({
+  reducer: {
+    login: loginValue.reducer,
+  },
+})

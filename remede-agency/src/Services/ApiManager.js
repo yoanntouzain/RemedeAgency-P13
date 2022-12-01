@@ -8,9 +8,20 @@ export async function userLogin(email, password) {
     },
     body: JSON.stringify({ email: email, password: password }),
   }).then((results) => results)
-  if (result.statusText === 'OK') {
-    return result
+  if (result.ok === true) {
+    return result.json().then((data) => data.body.token)
   } else {
     return null
   }
+}
+
+export async function userProfile(response) {
+  let result = await fetch(baseUrl + '/user/profile', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + response,
+    },
+  }).then((results) => results.json().then((data) => data))
+  return result
 }

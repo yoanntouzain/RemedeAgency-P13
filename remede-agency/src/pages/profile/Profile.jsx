@@ -1,13 +1,21 @@
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addDataState } from '../../features/login'
 
 function User() {
+  const dispatch = useDispatch()
+  dispatch(addDataState(localStorage.getItem('data')))
+  const user = useSelector((state) => state.login.data)
+  console.log(user)
+
   return (
     <main className="main bg-dark">
       <div className="header">
         <h1>
           Welcome back
           <br />
-          Tony Jarvis!
+          {user.firstName + ' '}
+          {user.lastName + '!'}
         </h1>
         <button className="edit-button">Edit Name</button>
       </div>
