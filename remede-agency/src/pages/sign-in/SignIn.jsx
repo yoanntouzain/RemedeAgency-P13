@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import { userLogin, userProfile } from '../../Services/ApiManager'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { signUpUser, resultToken, addToken } from '../../features/users'
+import { addDataStorage, login } from '../../features/login'
 
 //CSS
 import './signIn.css'
@@ -13,38 +12,21 @@ function SignIn() {
   const [msgError, setMsgError] = useState(false)
   const navigate = useNavigate()
 
-  // async function checkForm(e) {
-  //   e.preventDefault()
-  //   let response = await userLogin(email, password)
-  //   if (response != null) {
-  //     setMsgError(false)
-  //     let data = await userProfile(response)
-  //     // console.log(data)
-  //     navigate('/profile')
-  //   } else {
-  //     setMsgError(true)
-  //   }
-  // }
-
   const dispatch = useDispatch()
 
   async function checkForm(e) {
     e.preventDefault()
-    dispatch(signUpUser({ email, password }))
-    // dispatch(resultToken())
-    setTimeout(() => {
-      dispatch(resultToken())
-    }, 1000)
-
-    // if (localStorage.getItem('token') != null) {
-    //   dispatch(resultToken())
-    //   setMsgError(false)
-    // } else {
-    //   setMsgError(true)
-    // }
-    setTimeout(() => {
-      console.log(JSON.parse(localStorage.user))
-    }, 2000)
+    console.log(email, password)
+    const response = await login(email, password)
+    if (response != null) {
+      console.log('le user est co')
+      dispatch(addDataStorage(response))
+      setMsgError(false)
+      navigate('/profile')
+    } else {
+      console.log("le user n'existe pas")
+      setMsgError(true)
+    }
   }
 
   return (
