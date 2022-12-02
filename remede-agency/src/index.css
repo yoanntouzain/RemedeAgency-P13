@@ -74,6 +74,18 @@ body {
   text-decoration: underline;
 }
 
+/*//////////////////////*/
+
+.logout.display {
+  display: none;
+}
+
+.logout:not(.display) {
+  display: block;
+}
+
+/*//////////////////////*/
+
 .space {
   margin-right: 4.45px;
 }
