@@ -11,3 +11,11 @@
 .errorUser:not(.active) {
     display: none;
 }
+
+.signIn.display {
+    display: none;
+}
+
+.signIn:not(.display) {
+    display: block;
+}
