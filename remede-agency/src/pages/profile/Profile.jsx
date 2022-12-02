@@ -5,7 +5,7 @@ import { addDataState } from '../../features/login'
 function User() {
   const dispatch = useDispatch()
   dispatch(addDataState(localStorage.getItem('data')))
-  const user = useSelector((state) => state.login.data)
+  const user = useSelector((state) => state.login)
   console.log(user)
 
   return (
@@ -14,8 +14,8 @@ function User() {
         <h1>
           Welcome back
           <br />
-          {user.firstName + ' '}
-          {user.lastName + '!'}
+          {user.data.firstName + ' '}
+          {user.data.lastName + '!'}
         </h1>
         <button className="edit-button">Edit Name</button>
       </div>

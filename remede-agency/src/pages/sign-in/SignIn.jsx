@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addDataStorage, login } from '../../features/login'
+import { addDataStorage, login, addConnected } from '../../features/login'
 
 //CSS
 import './signIn.css'
@@ -16,15 +16,16 @@ function SignIn() {
 
   async function checkForm(e) {
     e.preventDefault()
-    console.log(email, password)
     const response = await login(email, password)
     if (response != null) {
       console.log('le user est co')
       dispatch(addDataStorage(response))
+      dispatch(addConnected(true))
       setMsgError(false)
       navigate('/profile')
     } else {
       console.log("le user n'existe pas")
+      dispatch(addConnected(true))
       setMsgError(true)
     }
   }

@@ -3,10 +3,10 @@ import { createSlice } from '@reduxjs/toolkit'
 const baseUrl = 'http://localhost:3001/api/v1'
 
 let initialState = {
-  token: '',
   data: {},
   loading: false,
   error: false,
+  connected: false,
 }
 
 export async function login(email, password) {
@@ -56,10 +56,26 @@ export const loginValue = createSlice({
       state.data = JSON.parse(action.payload)
       return state
     },
+    addConnected: (state, action) => {
+      localStorage.setItem('isConnected', action.payload)
+      state.connected = localStorage.getItem('isConnected')
+      return state
+    },
+    resetStorage: (state, action) => {
+      localStorage.clear()
+      state = initialState
+      return state
+    },
   },
 })
 
-export const { addToken, addDataStorage, addDataState } = loginValue.actions
+export const {
+  addToken,
+  addDataStorage,
+  addDataState,
+  addConnected,
+  resetStorage,
+} = loginValue.actions
 
 // export const login = createAsyncThunk('login', async (body) => {
 //   const response = await fetch(baseUrl + '/user/login', {
