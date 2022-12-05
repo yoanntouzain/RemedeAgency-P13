@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { addFirstName, addLastName } from '../../features/login'
 import { setFirstName, setLastName } from '../../features/modal'
 import './profile.css'
 
@@ -14,8 +15,8 @@ function User() {
   const navigate = useNavigate()
 
   function editName() {
-    dispatch(setFirstName(firstNames))
-    dispatch(setLastName(lastNames))
+    dispatch(addFirstName(firstNames))
+    dispatch(addLastName(lastNames))
     navigate('/profile')
 
     console.log('hello!')

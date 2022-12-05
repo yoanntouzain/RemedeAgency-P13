@@ -25,7 +25,6 @@ export async function login(email, password) {
   }).then((results) => results)
   if (response.ok === true) {
     responses = await response.json().then((response) => response.body.token)
-    localStorage.setItem('token', JSON.stringify(responses))
     return takeToken(responses)
   } else {
     responses = null
