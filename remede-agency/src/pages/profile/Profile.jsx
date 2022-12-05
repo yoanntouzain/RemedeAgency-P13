@@ -1,23 +1,62 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addDataState } from '../../features/login'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { setFirstName, setLastName } from '../../features/modal'
+import './profile.css'
 
 function User() {
   const dispatch = useDispatch()
-  dispatch(addDataState(localStorage.getItem('data')))
-  const user = useSelector((state) => state.login)
-  console.log(user)
+  let firstName = JSON.parse(localStorage.getItem('firstName'))
+  let lastName = JSON.parse(localStorage.getItem('lastName'))
+
+  const [firstNames, setFirstNames] = useState('')
+  const [lastNames, setLastNames] = useState('')
+  const navigate = useNavigate()
+
+  function editName() {
+    dispatch(setFirstName(firstNames))
+    dispatch(setLastName(lastNames))
+    navigate('/profile')
+
+    console.log('hello!')
+  }
 
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>
+        <h1 id="test">
           Welcome back
           <br />
-          {user.data.firstName + ' '}
-          {user.data.lastName + '!'}
+          {firstName + ' '}
+          {lastName + '!'}
         </h1>
-        <button className="edit-button">Edit Name</button>
+        <form>
+          <div className="editName">
+            <div>
+              <input
+                type="text"
+                id="firstName"
+                onChange={(e) => {
+                  setFirstNames(e.target.value)
+                }}
+                required
+              />
+              <input
+                type="text"
+                id="lastName"
+                onChange={(e) => {
+                  setLastNames(e.target.value)
+                }}
+                required
+              />
+              <div>
+                <button className="edit-button" onClick={editName}>
+                  Edit Name
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
       <h2 className="sr-only">Accounts</h2>
       <section className="account">

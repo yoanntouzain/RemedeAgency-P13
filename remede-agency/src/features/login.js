@@ -4,6 +4,8 @@ const baseUrl = 'http://localhost:3001/api/v1'
 
 let initialState = {
   data: {},
+  firstName: '',
+  lastName: '',
   loading: false,
   error: false,
   connected: false,
@@ -23,13 +25,14 @@ export async function login(email, password) {
   }).then((results) => results)
   if (response.ok === true) {
     responses = await response.json().then((response) => response.body.token)
+    localStorage.setItem('token', JSON.stringify(responses))
     return takeToken(responses)
   } else {
     responses = null
   }
 }
 
-async function takeToken(token) {
+export async function takeToken(token) {
   const response = await fetch(baseUrl + '/user/profile', {
     method: 'POST',
     headers: {
@@ -46,6 +49,7 @@ export const loginValue = createSlice({
   initialState,
   reducers: {
     addToken: (state, action) => {
+      localStorage.setItem('token', JSON.stringify(action.payload))
       state.token = action.payload
       return state
     },
@@ -54,6 +58,16 @@ export const loginValue = createSlice({
     },
     addDataState: (state, action) => {
       state.data = JSON.parse(action.payload)
+      return state
+    },
+    addFirstName: (state, action) => {
+      localStorage.setItem('firstName', JSON.stringify(action.payload))
+      state.firstName = action.payload
+      return state
+    },
+    addLastName: (state, action) => {
+      localStorage.setItem('lastName', JSON.stringify(action.payload))
+      state.lastName = action.payload
       return state
     },
     addConnected: (state, action) => {
@@ -73,6 +87,8 @@ export const {
   addToken,
   addDataStorage,
   addDataState,
+  addFirstName,
+  addLastName,
   addConnected,
   resetStorage,
 } = loginValue.actions
