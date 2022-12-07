@@ -1,0 +1,9 @@
+.editName {
+    display: flex;
+    justify-content: center;
+}
+
+.editName div {
+    display: flex;
+    flex-wrap: wrap;
+}

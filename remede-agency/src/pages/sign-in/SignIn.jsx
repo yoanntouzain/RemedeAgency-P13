@@ -1,7 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addDataStorage, login, addConnected } from '../../features/login'
+import {
+  addDataStorage,
+  login,
+  addConnected,
+  addFirstName,
+  addLastName,
+} from '../../features/login'
 
 //CSS
 import './signIn.css'
@@ -19,8 +25,11 @@ function SignIn() {
     const response = await login(email, password)
     if (response != null) {
       console.log('le user est co')
+      console.log(response)
       dispatch(addDataStorage(response))
       dispatch(addConnected(true))
+      dispatch(addFirstName(response.firstName))
+      dispatch(addLastName(response.lastName))
       setMsgError(false)
       navigate('/profile')
     } else {
