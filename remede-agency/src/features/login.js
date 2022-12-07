@@ -6,7 +6,6 @@ let initialState = {
   data: {},
   firstName: '',
   lastName: '',
-  loading: false,
   error: false,
   connected: false,
 }
@@ -25,6 +24,7 @@ export async function login(email, password) {
   }).then((results) => results)
   if (response.ok === true) {
     responses = await response.json().then((response) => response.body.token)
+    localStorage.setItem('token', JSON.stringify(responses))
     return takeToken(responses)
   } else {
     responses = null
@@ -43,15 +43,30 @@ export async function takeToken(token) {
   return data
 }
 
+export async function updateUser(firstName, lastName, token) {
+  const response = await fetch(baseUrl + '/user/profile', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+    },
+    body: JSON.stringify({
+      firstName: firstName,
+      lastName: lastName,
+    }),
+  }).then((response) => response)
+  if (response.ok === true) {
+    const data = await response.json().then((data) => data.body)
+    return data
+  } else {
+    return null
+  }
+}
+
 export const loginValue = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    addToken: (state, action) => {
-      localStorage.setItem('token', JSON.stringify(action.payload))
-      state.token = action.payload
-      return state
-    },
     addDataStorage: (state, action) => {
       localStorage.setItem('data', JSON.stringify(action.payload))
     },
@@ -74,6 +89,14 @@ export const loginValue = createSlice({
       state.connected = localStorage.getItem('isConnected')
       return state
     },
+    addError: (state, action) => {
+      state.error = action.payload
+      return state
+    },
+    deleteError: (state, action) => {
+      state.error = action.payload
+      return state
+    },
     resetStorage: (state, action) => {
       localStorage.clear()
       state = initialState
@@ -89,17 +112,7 @@ export const {
   addFirstName,
   addLastName,
   addConnected,
+  addError,
+  deleteError,
   resetStorage,
 } = loginValue.actions
-
-// export const login = createAsyncThunk('login', async (body) => {
-//   const response = await fetch(baseUrl + '/user/login', {
-//     method: 'POST',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({ email: 'tony@stark.com', password: 'password123' }),
-//   })
-//   const data = await response.json()
-//   return data
-// })

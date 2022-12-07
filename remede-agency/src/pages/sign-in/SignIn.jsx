@@ -7,6 +7,9 @@ import {
   addConnected,
   addFirstName,
   addLastName,
+  addDataState,
+  deleteError,
+  addError,
 } from '../../features/login'
 
 //CSS
@@ -24,17 +27,17 @@ function SignIn() {
     e.preventDefault()
     const response = await login(email, password)
     if (response != null) {
-      console.log('le user est co')
-      console.log(response)
       dispatch(addDataStorage(response))
+      dispatch(addDataState(localStorage.getItem('data')))
       dispatch(addConnected(true))
       dispatch(addFirstName(response.firstName))
       dispatch(addLastName(response.lastName))
+      dispatch(deleteError(false))
       setMsgError(false)
       navigate('/profile')
     } else {
-      console.log("le user n'existe pas")
-      dispatch(addConnected(true))
+      dispatch(addError(true))
+      dispatch(addConnected(false))
       setMsgError(true)
     }
   }
