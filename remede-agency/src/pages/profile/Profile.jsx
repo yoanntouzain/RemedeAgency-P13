@@ -1,25 +1,41 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { addFirstName, addLastName } from '../../features/login'
-import { setFirstName, setLastName } from '../../features/modal'
+import {
+  updateUser,
+  addDataState,
+  addDataStorage,
+  addFirstName,
+  addLastName,
+} from '../../features/login'
 import './profile.css'
 
 function User() {
   const dispatch = useDispatch()
   let firstName = JSON.parse(localStorage.getItem('firstName'))
   let lastName = JSON.parse(localStorage.getItem('lastName'))
+  let token = JSON.parse(localStorage.getItem('token'))
+  let inputFirstName = document.getElementById('firstName')
+  let inputLastName = document.getElementById('lastName')
 
   const [firstNames, setFirstNames] = useState('')
   const [lastNames, setLastNames] = useState('')
   const navigate = useNavigate()
 
-  function editName() {
-    dispatch(addFirstName(firstNames))
-    dispatch(addLastName(lastNames))
-    navigate('/profile')
-
-    console.log('hello!')
+  async function editName(e) {
+    e.preventDefault()
+    const response = await updateUser(firstNames, lastNames, token)
+    if (response != null) {
+      dispatch(addDataStorage(response))
+      dispatch(addDataState(localStorage.getItem('data')))
+      dispatch(addFirstName(firstNames))
+      dispatch(addLastName(lastNames))
+      navigate('/profile')
+      inputFirstName.value = ''
+      inputLastName.value = ''
+    } else {
+      alert('Error Unauthorized')
+    }
   }
 
   return (
@@ -31,12 +47,13 @@ function User() {
           {firstName + ' '}
           {lastName + '!'}
         </h1>
-        <form>
+        <form onSubmit={editName}>
           <div className="editName">
             <div>
               <input
                 type="text"
                 id="firstName"
+                pattern="[A-z]{2,}"
                 onChange={(e) => {
                   setFirstNames(e.target.value)
                 }}
@@ -45,15 +62,14 @@ function User() {
               <input
                 type="text"
                 id="lastName"
+                pattern="[A-z]{2,}"
                 onChange={(e) => {
                   setLastNames(e.target.value)
                 }}
                 required
               />
               <div>
-                <button className="edit-button" onClick={editName}>
-                  Edit Name
-                </button>
+                <button className="edit-button">Edit Name</button>
               </div>
             </div>
           </div>
