@@ -50,24 +50,30 @@ function User() {
         <form onSubmit={editName}>
           <div className="editName">
             <div>
-              <input
-                type="text"
-                id="firstName"
-                pattern="[A-z]{2,}"
-                onChange={(e) => {
-                  setFirstNames(e.target.value)
-                }}
-                required
-              />
-              <input
-                type="text"
-                id="lastName"
-                pattern="[A-z]{2,}"
-                onChange={(e) => {
-                  setLastNames(e.target.value)
-                }}
-                required
-              />
+              <div>
+                <label htmlFor="firstName">FirstName</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  pattern="[A-z]{2,}"
+                  onChange={(e) => {
+                    setFirstNames(e.target.value)
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="lastName">LastName</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  pattern="[A-z]{2,}"
+                  onChange={(e) => {
+                    setLastNames(e.target.value)
+                  }}
+                  required
+                />
+              </div>
               <div>
                 <button className="edit-button">Edit Name</button>
               </div>
