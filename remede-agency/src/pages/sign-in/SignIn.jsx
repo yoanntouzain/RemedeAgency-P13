@@ -1,34 +1,49 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   addDataStorage,
   login,
   addConnected,
   addFirstName,
   addLastName,
-  addDataState,
   deleteError,
   addError,
+  addEmailStorage,
+  checkboxValue,
 } from '../../features/login'
 
 //CSS
 import './signIn.css'
 
 function SignIn() {
+  let checkbox = document.getElementById('remember-me')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [msgError, setMsgError] = useState(false)
   const navigate = useNavigate()
+  const user = useSelector((state) => state.login.email)
+  console.log(user)
 
   const dispatch = useDispatch()
+
+  function checked(checkbox) {
+    if (checkbox) {
+      dispatch(addEmailStorage(email))
+      dispatch(checkboxValue(checkbox))
+    } else {
+      dispatch(checkboxValue(checkbox))
+    }
+  }
 
   async function checkForm(e) {
     e.preventDefault()
     const response = await login(email, password)
+    console.log(email)
+    console.log(password)
     if (response != null) {
+      checked(checkbox.checked)
       dispatch(addDataStorage(response))
-      dispatch(addDataState(localStorage.getItem('data')))
       dispatch(addConnected(true))
       dispatch(addFirstName(response.firstName))
       dispatch(addLastName(response.lastName))
