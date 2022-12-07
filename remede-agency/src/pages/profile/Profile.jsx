@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import {
   updateUser,
-  addDataState,
   addDataStorage,
   addFirstName,
   addLastName,
@@ -27,7 +26,6 @@ function User() {
     const response = await updateUser(firstNames, lastNames, token)
     if (response != null) {
       dispatch(addDataStorage(response))
-      dispatch(addDataState(localStorage.getItem('data')))
       dispatch(addFirstName(firstNames))
       dispatch(addLastName(lastNames))
       navigate('/profile')
