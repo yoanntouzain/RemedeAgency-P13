@@ -2,7 +2,7 @@ import React from 'react'
 import argentBankLogo from '../../assets/argentBankLogo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { resetStorage } from '../../features/login'
+import { logout } from '../../features/login'
 
 function Headers() {
   const dispatch = useDispatch()
@@ -11,7 +11,7 @@ function Headers() {
   let isConnected = localStorage.getItem('isConnected')
 
   function isLogout() {
-    dispatch(resetStorage())
+    dispatch(logout())
     navigate('/login')
   }
 
@@ -20,6 +20,7 @@ function Headers() {
       <Link className="main-nav-logo" to="/">
         <img
           className="main-nav-logo-image"
+          onClick={isLogout}
           src={argentBankLogo}
           alt="Argent Bank Logo"
         />

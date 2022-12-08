@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const baseUrl = 'http://localhost:3001/api/v1'
 
 let initialState = {
+  email: '',
+  password: '',
   data: {},
   firstName: '',
   lastName: '',
@@ -10,7 +12,7 @@ let initialState = {
   connected: false,
 }
 
-export async function login(email, password) {
+export async function login(email, password, checkbox) {
   let responses = ''
   const response = await fetch(baseUrl + '/user/login', {
     method: 'POST',
@@ -23,8 +25,14 @@ export async function login(email, password) {
     }),
   }).then((results) => results)
   if (response.ok === true) {
+    if (checkbox) {
+      localStorage.setItem('email', email)
+      localStorage.setItem('password', password)
+    } else {
+      localStorage.removeItem('email')
+      localStorage.removeItem('password')
+    }
     responses = await response.json().then((response) => response.body.token)
-    localStorage.setItem('token', JSON.stringify(responses))
     return takeToken(responses)
   } else {
     responses = null
@@ -67,6 +75,12 @@ export const loginValue = createSlice({
   name: 'login',
   initialState,
   reducers: {
+    addEmail: (state, action) => {
+      state.email = action.payload
+    },
+    addPassword: (state, action) => {
+      state.password = action.payload
+    },
     addDataStorage: (state, action) => {
       localStorage.setItem('data', JSON.stringify(action.payload))
     },
@@ -97,8 +111,12 @@ export const loginValue = createSlice({
       state.error = action.payload
       return state
     },
-    resetStorage: (state, action) => {
-      localStorage.clear()
+    logout: (state, action) => {
+      localStorage.removeItem('isConnected')
+      localStorage.removeItem('data')
+      localStorage.removeItem('lastName')
+      localStorage.removeItem('firstName')
+      localStorage.removeItem('token')
       state = initialState
       return state
     },
@@ -106,6 +124,8 @@ export const loginValue = createSlice({
 })
 
 export const {
+  addEmail,
+  addPassword,
   addToken,
   addDataStorage,
   addDataState,
@@ -114,5 +134,5 @@ export const {
   addConnected,
   addError,
   deleteError,
-  resetStorage,
+  logout,
 } = loginValue.actions
