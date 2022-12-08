@@ -7,7 +7,6 @@ import {
   addConnected,
   addFirstName,
   addLastName,
-  addDataState,
   deleteError,
   addError,
   addEmail,
@@ -39,8 +38,8 @@ function SignIn() {
     const checkBox = document.getElementById('remember-me')
     const response = await login(userEmail, userPassword, checkBox.checked)
     if (response != null) {
+      checked(checkbox.checked)
       dispatch(addDataStorage(response))
-      dispatch(addDataState(localStorage.getItem('data')))
       dispatch(addConnected(true))
       dispatch(addFirstName(response.firstName))
       dispatch(addLastName(response.lastName))

@@ -8,8 +8,10 @@ let initialState = {
   data: {},
   firstName: '',
   lastName: '',
+  email: '',
   error: false,
   connected: false,
+  checkbox: false,
 }
 
 export async function login(email, password, checkbox) {
@@ -83,9 +85,12 @@ export const loginValue = createSlice({
     },
     addDataStorage: (state, action) => {
       localStorage.setItem('data', JSON.stringify(action.payload))
+      state.data = action.payload
+      return state
     },
-    addDataState: (state, action) => {
-      state.data = JSON.parse(action.payload)
+    addEmailStorage: (state, action) => {
+      localStorage.setItem('email', JSON.stringify(action.payload))
+      state.email = action.payload
       return state
     },
     addFirstName: (state, action) => {
@@ -111,6 +116,12 @@ export const loginValue = createSlice({
       state.error = action.payload
       return state
     },
+    checkboxValue: (state, action) => {
+      localStorage.setItem('checkbox', action.payload)
+      state.checkbox = action.payload
+      return state
+    },
+
     logout: (state, action) => {
       localStorage.removeItem('isConnected')
       localStorage.removeItem('data')
@@ -128,11 +139,11 @@ export const {
   addPassword,
   addToken,
   addDataStorage,
-  addDataState,
+  addEmailStorage,
   addFirstName,
   addLastName,
   addConnected,
   addError,
   deleteError,
-  logout,
+  resetStorage,
 } = loginValue.actions

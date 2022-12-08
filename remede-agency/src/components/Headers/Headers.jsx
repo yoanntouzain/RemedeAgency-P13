@@ -5,9 +5,8 @@ import { useDispatch } from 'react-redux'
 import { logout } from '../../features/login'
 
 function Headers() {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  let checkbox = JSON.parse(localStorage.getItem('checkbox'))
   let isConnected = localStorage.getItem('isConnected')
 
   function isLogout() {
