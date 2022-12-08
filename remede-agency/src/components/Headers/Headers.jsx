@@ -1,20 +1,17 @@
 import React from 'react'
 import argentBankLogo from '../../assets/argentBankLogo.png'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../features/login'
 
 function Headers() {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
-  let checkbox = JSON.parse(localStorage.getItem('checkbox'))
+
   let isConnected = localStorage.getItem('isConnected')
 
   function isLogout() {
-    console.log(checkbox)
-    localStorage.removeItem('token')
-    localStorage.removeItem('checkbox')
-    localStorage.removeItem('data')
-    localStorage.removeItem('isConnected')
-    localStorage.removeItem('firstName')
-    localStorage.removeItem('lastName')
+    dispatch(logout())
     navigate('/login')
   }
 
@@ -23,6 +20,7 @@ function Headers() {
       <Link className="main-nav-logo" to="/">
         <img
           className="main-nav-logo-image"
+          onClick={isLogout}
           src={argentBankLogo}
           alt="Argent Bank Logo"
         />

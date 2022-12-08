@@ -7,43 +7,39 @@ import {
   addConnected,
   addFirstName,
   addLastName,
+  addDataState,
   deleteError,
   addError,
-  addEmailStorage,
-  checkboxValue,
+  addEmail,
+  addPassword,
 } from '../../features/login'
 
 //CSS
 import './signIn.css'
 
 function SignIn() {
-  let checkbox = document.getElementById('remember-me')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
   const [msgError, setMsgError] = useState(false)
   const navigate = useNavigate()
-  const user = useSelector((state) => state.login.email)
-  console.log(user)
-
   const dispatch = useDispatch()
+  const userEmail = useSelector((state) => state.login.email)
+  const userPassword = useSelector((state) => state.login.password)
+  let emailStorage = localStorage.getItem('email')
+  let passwordStorage = localStorage.getItem('password')
 
-  function checked(checkbox) {
-    if (checkbox) {
-      dispatch(addEmailStorage(email))
-      dispatch(checkboxValue(checkbox))
-    } else {
-      dispatch(checkboxValue(checkbox))
+  async function checkEmailStorage(emailStorage) {
+    if (emailStorage && passwordStorage != null) {
+      dispatch(addEmail(emailStorage))
+      dispatch(addPassword(passwordStorage))
     }
   }
-
+  checkEmailStorage(emailStorage)
   async function checkForm(e) {
     e.preventDefault()
-    const response = await login(email, password)
-    console.log(email)
-    console.log(password)
+    const checkBox = document.getElementById('remember-me')
+    const response = await login(userEmail, userPassword, checkBox.checked)
     if (response != null) {
-      checked(checkbox.checked)
       dispatch(addDataStorage(response))
+      dispatch(addDataState(localStorage.getItem('data')))
       dispatch(addConnected(true))
       dispatch(addFirstName(response.firstName))
       dispatch(addLastName(response.lastName))
@@ -74,8 +70,9 @@ function SignIn() {
               id="username"
               name="username"
               placeholder="yoann@gmail.com"
+              value={userEmail}
               onChange={(e) => {
-                setEmail(e.target.value)
+                dispatch(addEmail(e.target.value))
               }}
             />
           </div>
@@ -85,8 +82,9 @@ function SignIn() {
               type="password"
               id="password"
               name="username"
+              value={userPassword}
               onChange={(e) => {
-                setPassword(e.target.value)
+                dispatch(addPassword(e.target.value))
               }}
             />
           </div>

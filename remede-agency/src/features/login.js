@@ -3,16 +3,16 @@ import { createSlice } from '@reduxjs/toolkit'
 const baseUrl = 'http://localhost:3001/api/v1'
 
 let initialState = {
+  email: '',
+  password: '',
   data: {},
   firstName: '',
   lastName: '',
-  email: '',
   error: false,
   connected: false,
-  checkbox: false,
 }
 
-export async function login(email, password) {
+export async function login(email, password, checkbox) {
   let responses = ''
   const response = await fetch(baseUrl + '/user/login', {
     method: 'POST',
@@ -25,8 +25,14 @@ export async function login(email, password) {
     }),
   }).then((results) => results)
   if (response.ok === true) {
+    if (checkbox) {
+      localStorage.setItem('email', email)
+      localStorage.setItem('password', password)
+    } else {
+      localStorage.removeItem('email')
+      localStorage.removeItem('password')
+    }
     responses = await response.json().then((response) => response.body.token)
-    localStorage.setItem('token', JSON.stringify(responses))
     return takeToken(responses)
   } else {
     responses = null
@@ -69,14 +75,17 @@ export const loginValue = createSlice({
   name: 'login',
   initialState,
   reducers: {
+    addEmail: (state, action) => {
+      state.email = action.payload
+    },
+    addPassword: (state, action) => {
+      state.password = action.payload
+    },
     addDataStorage: (state, action) => {
       localStorage.setItem('data', JSON.stringify(action.payload))
-      state.data = action.payload
-      return state
     },
-    addEmailStorage: (state, action) => {
-      localStorage.setItem('email', JSON.stringify(action.payload))
-      state.email = action.payload
+    addDataState: (state, action) => {
+      state.data = JSON.parse(action.payload)
       return state
     },
     addFirstName: (state, action) => {
@@ -102,14 +111,12 @@ export const loginValue = createSlice({
       state.error = action.payload
       return state
     },
-    checkboxValue: (state, action) => {
-      localStorage.setItem('checkbox', action.payload)
-      state.checkbox = action.payload
-      return state
-    },
-
-    resetStorage: (state, action) => {
-      localStorage.clear()
+    logout: (state, action) => {
+      localStorage.removeItem('isConnected')
+      localStorage.removeItem('data')
+      localStorage.removeItem('lastName')
+      localStorage.removeItem('firstName')
+      localStorage.removeItem('token')
       state = initialState
       return state
     },
@@ -117,14 +124,15 @@ export const loginValue = createSlice({
 })
 
 export const {
+  addEmail,
+  addPassword,
   addToken,
   addDataStorage,
-  addEmailStorage,
+  addDataState,
   addFirstName,
   addLastName,
   addConnected,
   addError,
   deleteError,
-  checkboxValue,
-  resetStorage,
+  logout,
 } = loginValue.actions
