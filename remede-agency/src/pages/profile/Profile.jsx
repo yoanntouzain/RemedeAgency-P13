@@ -1,23 +1,83 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { addDataState } from '../../features/login'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import {
+  updateUser,
+  addDataStorage,
+  addFirstName,
+  addLastName,
+} from '../../features/login'
+import './profile.css'
 
 function User() {
   const dispatch = useDispatch()
-  dispatch(addDataState(localStorage.getItem('data')))
-  const user = useSelector((state) => state.login)
-  console.log(user)
+  let firstName = JSON.parse(localStorage.getItem('firstName'))
+  let lastName = JSON.parse(localStorage.getItem('lastName'))
+  let token = JSON.parse(localStorage.getItem('token'))
+  let inputFirstName = document.getElementById('firstName')
+  let inputLastName = document.getElementById('lastName')
+
+  const [firstNames, setFirstNames] = useState('')
+  const [lastNames, setLastNames] = useState('')
+  const navigate = useNavigate()
+
+  async function editName(e) {
+    e.preventDefault()
+    const response = await updateUser(firstNames, lastNames, token)
+    if (response != null) {
+      dispatch(addDataStorage(response))
+      dispatch(addFirstName(firstNames))
+      dispatch(addLastName(lastNames))
+      navigate('/profile')
+      inputFirstName.value = ''
+      inputLastName.value = ''
+    } else {
+      alert('Error Unauthorized')
+    }
+  }
 
   return (
     <main className="main bg-dark">
       <div className="header">
-        <h1>
+        <h1 id="test">
           Welcome back
           <br />
-          {user.data.firstName + ' '}
-          {user.data.lastName + '!'}
+          {firstName + ' '}
+          {lastName + '!'}
         </h1>
-        <button className="edit-button">Edit Name</button>
+        <form onSubmit={editName}>
+          <div className="editName">
+            <div>
+              <div>
+                <label htmlFor="firstName">FirstName</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  pattern="[A-z]{2,}"
+                  onChange={(e) => {
+                    setFirstNames(e.target.value)
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="lastName">LastName</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  pattern="[A-z]{2,}"
+                  onChange={(e) => {
+                    setLastNames(e.target.value)
+                  }}
+                  required
+                />
+              </div>
+              <div>
+                <button className="edit-button">Edit Name</button>
+              </div>
+            </div>
+          </div>
+        </form>
       </div>
       <h2 className="sr-only">Accounts</h2>
       <section className="account">
