@@ -112,51 +112,51 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-  /user/transationCurrentMonth:
+  /user/transactionCurrentMonth:
     get:
       tags:
-        - User Module
-      summary: Transation
-      description: API for visualize current month transation
+        - Transaction module
+      summary: Transaction
+      description: API for visualize current month transaction
       responses:
         '200':
           description: successfully operation
           schema:
-            $ref: '#/definitions/LoginResponses'
+            $ref: '#/definitions/transactionResponse'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
-  /user/{transationId}:
+  /user/{transactionId}:
     get:
       tags:
-        - User Module
-      summary: Find transation by ID
+        - Transaction module
+      summary: Find transaction by ID
       description: Returns a single pet
-      operationId: getTransationById
+      operationId: gettransactionById
       parameters:
-        - name: transationId
+        - name: transactionId
           type: integer
           format: int64
           in: path
-          description: ID of transation to return
+          description: ID of transaction to return
           required: true
       responses:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/ApiResponses'
+            $ref: '#/definitions/transactionId'
         '400':
           description: Invalid ID supplied
         '404':
-          description: Transation not found
+          description: transaction not found
     post:
       security:
         - Bearer: []
       tags:
-        - User Module
-      summary: Add new transation
-      description: Add new transation
+        - Transaction module
+      summary: Add new transaction
+      description: Add new transaction
       parameters:
         - in: header
           name: Authorization
@@ -164,24 +164,24 @@ paths:
           description: Attach Bearer JWT token
           required: true
         - in: path
-          name: transationId
+          name: transactionId
           type: integer
           format: int64
-          description: ID of transation to return
+          description: ID of transaction to return
           required: true
         - in: body
           name: body
-          description: Add transation attributes
+          description: Add transaction attributes
           required: true
           schema:
-            $ref: '#/definitions/TransationId'
+            $ref: '#/definitions/transactionId'
       produces:
         - application/json
       responses:
         '200':
           description: Successful operation
           schema:
-            $ref: '#/definitions/TransationId'
+            $ref: '#/definitions/transactionId'
         '405':
           description: Invalid input
         '500':
@@ -190,9 +190,9 @@ paths:
       security:
         - Bearer: []
       tags:
-        - User Module
-      summary: Update an existing transation
-      description: Update an existing transation
+        - Transaction module
+      summary: Update an existing transaction
+      description: Update an existing transaction
       parameters:
         - in: header
           name: Authorization
@@ -200,17 +200,17 @@ paths:
           description: Attach Bearer JWT token
           required: true
         - in: path
-          name: transationId
+          name: transactionId
           type: integer
           format: int64
-          description: ID of transation to return
+          description: ID of transaction to return
           required: true
         - in: body
           name: body
-          description: Update transation attributes
+          description: Update transaction attributes
           required: true
           schema:
-            $ref: '#/definitions/TransationId'
+            $ref: '#/definitions/transactionId'
       produces:
         - application/json
       responses:
@@ -226,16 +226,16 @@ paths:
       security:
         - Bearer: []
       tags:
-        - User Module
-      summary: Delete an existing transation
-      description: Delete an existing transation
+        - Transaction module
+      summary: Delete an existing transaction
+      description: Delete an existing transaction
       parameters:
         - name: Authorization
           type: string
           in: header
           description: Attach Bearer JWT token
           required: true
-        - name: transationId
+        - name: transactionId
           type: integer
           format: int64
           in: path
@@ -249,7 +249,7 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: Transation not found
+          description: transaction not found
         '500':
           description: Internal Server Error
 securityDefinitions:
@@ -306,7 +306,7 @@ definitions:
         type: string
       lastName:
         type: string
-  TransationId:
+  transactionId:
     type: object
     properties:
       category:
@@ -320,14 +320,25 @@ definitions:
         type: integer
       message:
         type: string
-  LoginResponses:
+  transaction:
     type: object
     properties:
-      transation1:
+      id:
+        type: integer
+      date:
         type: string
-      transation2:
+        example: "June 20th, 2020"
+      description:
         type: string
-      transation3:
-        type: string
-      transation4:
-        type: string
+        example: "Golden Sun Bakery"
+      amount:
+        type: integer
+      balance:
+        type: integer
+  transactionResponse:
+    type: object
+    properties:
+      listTransaction:
+        type: array
+        items:
+          $ref: "#/definitions/transaction"
