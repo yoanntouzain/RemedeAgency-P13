@@ -20,7 +20,7 @@ npm run dev:server
 Your server should now be running at http://locahost:3001 and you will now have two users in your MongoDB database!
 
 ### Instructions Front
-1. cd ./remedeagency
+1. cd ./remede-agency
 2. npm install
 3. npm run start
 
