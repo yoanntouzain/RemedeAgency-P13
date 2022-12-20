@@ -33,6 +33,8 @@ export async function login(email, password, checkbox) {
       localStorage.removeItem('password')
     }
     responses = await response.json().then((response) => response.body.token)
+    localStorage.setItem('token', JSON.stringify(responses))
+
     return takeToken(responses)
   } else {
     responses = null
@@ -126,7 +128,6 @@ export const loginValue = createSlice({
 export const {
   addEmail,
   addPassword,
-  addToken,
   addDataStorage,
   addDataState,
   addFirstName,
